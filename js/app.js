@@ -1,23 +1,11 @@
 
-//selecting all
-
+//selecting all cells
 var boxes = document.querySelectorAll('td'),
-    // rows = document.querySelectorAll('tr');
-    rows = 6,
-    counter = [0,0,0,0,0,0,0]; //counting coloured boxes in each column
+    boxesLen = boxes.length,
+    player = 0; //even num - human, odd - computer
 
-//
-// for (var  i = 0; i < rowsLen; i++) {
-//     var name = rows[i]+'Counter';
-//     console.log('?',rows[i]);
-// }
-
-    // rowCounter = rows.length-1;
-
-console.log(rows);
-
-for (var i = 0; i < boxes.length; i++) {
-    boxes[i].addEventListener("click", addCoin)
+for (var i = 0, j = boxes.length; i < j; i++) {
+    boxes[i].addEventListener("click", addCoin);
 
     //naming columns
     if (i%7 === 0) {
@@ -43,28 +31,39 @@ for (var i = 0; i < boxes.length; i++) {
     }
 }
 
+//adding counters to each column to know which cell is the first to colour
+var counters = [];
+
+for (var i = 0; i < 7; i++) {
+    counters[boxes[i].className] = 6;
+}
 
 
 function addCoin() {
-    console.log(this.className); //name of the column
-    console.log(this.parentNode); //shows the row
 
     var thisColumn = document.querySelectorAll("."+this.className);
-    console.log(thisColumn, "    THIS");
-    console.log("counter" + this.className);
+    counters[this.className]--;
+    player++;
+    console.log("   ERROR  ", counters[this.className], thisColumn[counters[this.className]]);
 
-    console.log(thisColumn[rows-1]);
-    thisColumn[rows-1].style.backgroundColor='green';
+    if (player % 2 === 1) {
+        console.log('tak')
+        thisColumn[counters[this.className]].style.backgroundColor= "green";
+        randomMovement();
+    }
+    else {
+        thisColumn[counters[this.className]].style.backgroundColor= "red";
+        //display a box 'your turn'
+    }
+}
 
-    // console.log(boxes, "   thIS --  ", this);
-    // console.log(boxes.indexOf(this));
+function randomMovement() {
+    //randomly choose a 'clicked' cell
+    var randColumn = Math.floor(Math.random() * boxesLen);
+    console.log(boxes[randColumn], '   random');
+    boxes[randColumn].click();
 
-      //  boxToSelect = rows[rowCounter].querySelector(boxClass);
-   // console.log(boxToSelect);
 
-
-    //keep the number of coloured boxes
-    return
 }
 
 
